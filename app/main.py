@@ -24,6 +24,11 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/")
+def root():
+    return {"mensagem": "API do Assistente Inteligente de Consulta a Documentos Corporativos no ar. Acesse /docs para a documentacao interativa."}
+
+
 @app.post("/perguntar", response_model=RespostaResponse)
 def perguntar(request: PerguntaRequest):
     if not request.pergunta or not request.pergunta.strip():
