@@ -29,5 +29,8 @@ def gerar_resposta(pergunta, trechos):
     contexto = montar_contexto(trechos)
     prompt = PROMPT_BASE.format(contexto=contexto, pergunta=pergunta)
 
-    resposta = client.models.generate_content(model=GEN_MODEL, contents=prompt)
-    return resposta.text
+    resposta = client.chat.completions.create(
+        model=GEN_MODEL,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return resposta.choices[0].message.content

@@ -1,18 +1,12 @@
 import json
 import numpy as np
-from google.genai import types
 
-from app.config import client, EMBED_MODEL
+from app.config import embedding_model
 from app.database import get_connection
 
 
 def gerar_embedding_pergunta(pergunta):
-    resultado = client.models.embed_content(
-        model=EMBED_MODEL,
-        contents=pergunta,
-        config=types.EmbedContentConfig(task_type="RETRIEVAL_QUERY"),
-    )
-    return np.array(resultado.embeddings[0].values)
+    return np.array(embedding_model.encode(pergunta))
 
 
 def similaridade_cosseno(a, b):

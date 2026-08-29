@@ -2,9 +2,7 @@ import glob
 import json
 import os
 
-from google.genai import types
-
-from app.config import client, EMBED_MODEL
+from app.config import embedding_model
 from app.database import get_connection, init_db
 
 
@@ -38,13 +36,8 @@ def dividir_em_chunks(texto, max_chars=800):
     return chunks
 
 
-def gerar_embedding(texto, task_type="RETRIEVAL_DOCUMENT"):
-    resultado = client.models.embed_content(
-        model=EMBED_MODEL,
-        contents=texto,
-        config=types.EmbedContentConfig(task_type=task_type),
-    )
-    return resultado.embeddings[0].values
+def gerar_embedding(texto):
+    return embedding_model.encode(texto).tolist()
 
 
 def indexar():
@@ -52,7 +45,6 @@ def indexar():
     conn = get_connection()
     cur = conn.cursor()
 
-    # limpa dados antigos para reindexar do zero
     cur.execute("DELETE FROM chunks")
     cur.execute("DELETE FROM documents")
     conn.commit()
